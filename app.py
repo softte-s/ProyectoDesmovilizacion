@@ -1,7 +1,3 @@
-import os
-st.write("Directorio actual:", os.getcwd())
-st.write("Archivos disponibles:", os.listdir())
-
 import streamlit as st
 import pickle
 import pandas as pd
@@ -383,3 +379,4 @@ with tab2:
 * **Lectura Ejecutiva (Bajo Riesgo):** Es el **mejor perfil en términos de éxito**. Cumplen, avanzan y requieren poco seguimiento. El riesgo principal es la **doble carga** como cabeza de hogar.
 
                    """)
+
