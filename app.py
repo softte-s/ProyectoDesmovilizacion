@@ -1,12 +1,14 @@
 import streamlit as st
 import pickle
 import pandas as pd
+import numpy as np
 
 # Cargar objetos guardados
 scaler = pickle.load(open("scaler.pkl", "rb"))
 model = pickle.load(open("hierarchical_model.pkl", "rb"))
 with open("ordinal_encoder.pkl", "rb") as f:
     ordinal_encoder = pickle.load(f)
+centroides = pickle.load(open("centroides.pkl", "rb"))
 # Cargar datos originales desde CSV
 data_original = pd.read_csv("muestra_38000.csv")  # <-- pon aquí tu archivo real
 
@@ -38,6 +40,15 @@ def transform_input(df):
     df_copy[num_cols] = scaler.transform(df_copy[num_cols])
 
     return df_copy
+
+#   ASIGNACIÓN DE CLUSTER NUEVO
+def asignar_cluster_nuevo(x, centroides):
+    """
+    Asigna el cluster más cercano usando distancia Euclidiana.
+    x: numpy array con shape (1, n_features)
+    """
+    distancias = np.linalg.norm(centroides.values - x, axis=1)
+    return distancias.argmin()
 
 # Aplicación Streamlit
 st.set_page_config(
@@ -298,20 +309,10 @@ with tab1:
             8: "Perfil Femenino, Parcialmente Beneficiado"
         }
 
-        # Transformar nuevo input
+        # Transformación
         transformed = transform_input(input_df)
 
-        # Transformar dataset completo original
-        data_original_transformed = transform_input(data_original)
-
-        # Unir dataset completo + nuevo registro
-        full_plus_new = pd.concat([data_original_transformed, transformed], ignore_index=True)
-
-        # Recalcular clustering jerárquico completo
-        labels = model.fit_predict(full_plus_new)
-
-        # Cluster del nuevo cliente = último registro
-        cluster = labels[-1]
+        cluster = asignar_cluster_nuevo(transformed.values, centroides)
 
         contenido = f"# Perfil Identificado: {nombres_cluster[cluster]}\n\n"
         
@@ -379,4 +380,5 @@ with tab2:
 * **Lectura Ejecutiva (Bajo Riesgo):** Es el **mejor perfil en términos de éxito**. Cumplen, avanzan y requieren poco seguimiento. El riesgo principal es la **doble carga** como cabeza de hogar.
 
                    """)
+
 
