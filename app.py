@@ -1,3 +1,7 @@
+import os
+st.write("Directorio actual:", os.getcwd())
+st.write("Archivos disponibles:", os.listdir())
+
 import streamlit as st
 import pickle
 import pandas as pd
@@ -377,4 +381,5 @@ with tab2:
         st.markdown("""
         * **Características Predominantes:** Es el primer grupo **100% femenino** (6.3% del total), entre 26 y 40 años. Es un perfil de **éxito sobresaliente**: no reciben TRV/PDT, pero **sí tienen BIE (100%)**, censos completos y el **96.9% ha culminado**. Son cabezas de hogar, con un número significativo de hijos (27.9% con 1 hijo).
 * **Lectura Ejecutiva (Bajo Riesgo):** Es el **mejor perfil en términos de éxito**. Cumplen, avanzan y requieren poco seguimiento. El riesgo principal es la **doble carga** como cabeza de hogar.
+
                    """)
